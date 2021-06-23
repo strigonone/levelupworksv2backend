@@ -1,58 +1,68 @@
 const MongoClient = require("mongodb").MongoClient;
 const mongoose = require("mongoose");
-const Student = require("./student");
 const express = require("express");
+const Student = require("./student");
+const dotenv = require("dotenv");
+const routesUrls = require("./routes/routes");
+const cors = require("cors");
 
 // express app
 const app = express();
 
+dotenv.config();
+
 // connect to mongodb
-const uri =
-	"mongodb+srv://gar1080:gar6969@missionreadyproject6.xoipl.mongodb.net/MissionReadyLevelUpWorks?retryWrites=true&w=majority";
 mongoose
-	.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
-	.then((result) => app.listen(8080))
-	.catch((err) => console.log(err));
+  .connect(process.env.DATABASE_ACCESS, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then((result) => app.listen(8080))
+  .catch((err) => console.log(err));
 
 const client = new MongoClient(uri, {
-	useNewUrlParser: true,
-	useUnifiedTopology: true,
-});
-client.connect((err) => {
-	const collection = client.db("test").collection("devices");
-	// perform actions on the collection object
-	client.close();
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
 });
 
-// mongoose and mongo sandbox routes
+client.connect((err) => {
+  const collection = client.db("test").collection("devices");
+  // perform actions on the collection object
+  client.close();
+});
 
 // Adding student manually from backend
 app.get("/api/add-student", (req, res) => {
-	const student = new Student({
-		name: "Ricardo",
-		email: "ricardo@email.com",
-	});
+  const student = new Student({
+    name: "Ricardo",
+    email: "ricardo@email.com",
+    password: "qwer",
+  });
 
-	student
-		.save()
-		.then((result) => {
-			res.send(result);
-		})
-		.catch((err) => {
-			console.log(err);
-		});
+  student
+    .save()
+    .then((result) => {
+      res.send(result);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });
 
 // Getting all students or mongodb collections
 app.get("/api/all-students", (req, res) => {
-	Student.find()
-		.then((result) => {
-			res.send(result);
-		})
-		.catch((err) => {
-			console.log(err);
-		});
+  Student.find()
+    .then((result) => {
+      res.send(result);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });
+
+app.use(express.json());
+app.use(cors());
+app.use("/api", routesUrls);
 
 const port = process.env.PORT || 6969;
 app.listen(port, () => console.log(`Server ready at port ${port}`));
