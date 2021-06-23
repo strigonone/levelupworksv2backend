@@ -20,7 +20,7 @@ mongoose
   .then((result) => app.listen(8080))
   .catch((err) => console.log(err));
 
-const client = new MongoClient(uri, {
+const client = new MongoClient(process.env.DATABASE_ACCESS, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -59,6 +59,7 @@ app.get("/api/all-students", (req, res) => {
       console.log(err);
     });
 });
+
 
 app.use(express.json());
 app.use(cors());
