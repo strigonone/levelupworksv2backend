@@ -49,17 +49,6 @@ app.get("/api/add-student", (req, res) => {
     });
 });
 
-// Getting all students or mongodb collections
-app.get("/api/all-students", (req, res) => {
-  Student.find()
-    .then((result) => {
-      res.send(result);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
-
 
 app.use(express.json());
 app.use(cors());

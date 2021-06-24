@@ -25,18 +25,15 @@ router.post('/enrol',(req, res)=> {
     })
 })
 
-router.post("/signin", (req, res) => {
+router.post("/login", (req, res) => {
   enrolSchema.findOne({'email': req.body.email})
     .then((result) => {
         if(result.password === req.body.password){
-            console.log('Password OK')
-            res.send(result);
-        } else {
-            console.log('Password Incorrect')
-        }
+            res.send('Password OK')
+        } else {res.send('Password Incorrect')}
     })
     .catch((err) => {
-      console.log(err);
+      res.send('Email is not registered');
     });
 });
     
