@@ -47,7 +47,7 @@ app.get("/api/add-student", (req, res) => {
     .catch((err) => {
       console.log(err);
     });
-});
+}); 
 
 
 app.use(express.json());
