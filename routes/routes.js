@@ -1,11 +1,8 @@
 const { request } = require("express");
 const express = require("express");
 const router = express.Router();
-const enrolSchema = require('../models/EnrolModel')
-
-router.get('/en', (req,res) => {
-    res.send('From Enrol! Yeah!')
-})
+const enrolSchema = require('../models/EnrolModel');
+const userSession = require('../models/UserSession');
 
 router.post('/enrol',(req, res)=> { 
     const enrolUser = new enrolSchema({
@@ -28,5 +25,19 @@ router.post('/enrol',(req, res)=> {
     })
 })
 
+router.post("/signin", (req, res) => {
+  enrolSchema.findOne({'email': req.body.email})
+    .then((result) => {
+        if(result.password === req.body.password){
+            console.log('Password OK')
+            res.send(result);
+        } else {
+            console.log('Password Incorrect')
+        }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
     
 module.exports = router
